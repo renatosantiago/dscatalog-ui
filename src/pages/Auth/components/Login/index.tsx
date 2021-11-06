@@ -22,7 +22,7 @@ const Login = () => {
   const history = useHistory();
   let location = useLocation<LocationState>();
 
-  const { from } = location.state || { from : { pattern: "/admin" } };
+  const { from } = location.state || { from : { pattern: "/admin/products" } };
 
 
   const onSubmit = (data: FormData) => {

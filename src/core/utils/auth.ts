@@ -61,6 +61,6 @@ export const hasRole = (roles: Role[] = []) => {
 
 export const logout = () => {
   localStorage.removeItem('authData');
-  history.replace('/auth/login')
+  history.replace('/');
 }
 
