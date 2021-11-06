@@ -1,3 +1,4 @@
+import { hasRole } from 'core/utils/auth';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './styles.scss';
@@ -12,7 +13,9 @@ const Navbar = () => (
         <NavLink to="/admin/categories" className="admin-nav-item">Minhas Categorias</NavLink>
       </li>
       <li>
-        <NavLink to="/admin/users" className="admin-nav-item">Meus Usuários</NavLink>
+        { hasRole(['ROLE_ADMIN']) && (
+          <NavLink to="/admin/users" className="admin-nav-item">Meus Usuários</NavLink>
+        )}
       </li>
     </ul>
   </nav>
