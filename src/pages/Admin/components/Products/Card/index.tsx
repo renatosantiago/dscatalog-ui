@@ -1,20 +1,45 @@
 import React from 'react';
-import './styles.scss'
+import ProductPrice from 'core/components/ProductPrice';
+import { Product } from 'core/types/Product';
+import './styles.scss';
 
-const Card = () => {
+type Props = {
+  product: Product
+}
+
+const Card = ({ product }: Props ) => {
   return (
     <div className="card-base product-card-admin">
       <div className="row">
         <div className="col-2 text-center border-right py-1">
-          <img src="https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/3-big.jpg" 
-              alt=""
+          <img src={product.imgUrl}
+              alt={product.name}
               className="product-card-image-admin" />
         </div>
         <div className="col-7 py-1">
-          <h6>core i7</h6>
+          <h6> {product.name} </h6>
+          <ProductPrice price={product.price} />
+          <div>
+            {product.categories.map(category => (
+              <span className="badge badge-pill badge-secondary mr-1" key={category.id}>
+                {category.name}
+              </span>
+            ))}
+          </div>
         </div>
-        <div className="col-3 py-1">
-          <h6>ações</h6>
+        <div className="col-3 pt-3 pr-4">
+          <button
+            type="button"
+            className="btn btn-outline-secondary btn-block border-radius-10 mb-3">
+              EDITAR
+          </button>
+
+          <button
+            type="button"
+            className="btn btn-outline-danger btn-block border-radius-10 mb-3">
+              EXCLUIR
+          </button>
+
         </div>
       </div>
     </div>
