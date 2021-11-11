@@ -10,11 +10,8 @@ const Products = () => {
         <Route path="/admin/products" exact>
           <List />
         </Route>
-        <Route path="/admin/products/create">
+        <Route path="/admin/products/:productId">
           <Form />
-        </Route>
-        <Route path="/admin/products/:productID">
-          <h1>editar produto</h1>
         </Route>
       </Switch>
     </div>

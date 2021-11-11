@@ -1,35 +1,58 @@
-import React from 'react';
-import { makePrivateRequest } from 'core/utils/request';
+import React, { useEffect } from 'react';
+import { makePrivateRequest, makeRequest } from 'core/utils/request';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import BaseForm from '../../BaseForm';
+import { useHistory, useParams } from 'react-router';
 import './styles.scss';
-import { useHistory } from 'react-router';
 
 type FormState = {
   name: string;
   price: string;
   description: string;
-  imageUrl: string;
+  imgUrl: string;
+}
+
+type paramsTypes = {
+  productId: string;
 }
 
 const Form = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormState>();
   const history = useHistory();
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormState>();
+  const { productId } = useParams<paramsTypes>();
+  const isEditing = productId !== 'create';
+  const formTitle = isEditing ? 'Editar produto' : 'Cadastrar um produto';
 
+  useEffect(() => {
+    if(isEditing) {
+      makeRequest({ url: `/products/${productId}` })
+        .then(response => {
+          setValue('name', response.data.name);
+          setValue('price', response.data.price);
+          setValue('description', response.data.description);
+          setValue('imgUrl', response.data.imgUrl);
+        })
+    }
+  }, [productId, isEditing, setValue])
+  
   const onSubmit = (data: FormState) => {
-    makePrivateRequest({ url: '/products11', method: 'POST', data })
-      .then(() => {
-        toast.info('Produto cadastrado com sucesso!');
-        history.push('/admin/products')
-      }).catch(error => {
-        toast.error(error.response.status + ' - Erro ao salvar produto ');
-      });
+    makePrivateRequest({ 
+      url: isEditing ? `/products/${productId}` : '/products', 
+      method: isEditing ? 'PUT' : 'POST', 
+      data 
+    })
+    .then(() => {
+      toast.success('Produto cadastrado com sucesso!');
+      history.push('/admin/products')
+    }).catch(error => {
+      toast.error(error.response.status + ' - Erro ao salvar produto ');
+    });
   }
 
   return(
     <form onSubmit={handleSubmit(onSubmit)}>
-      <BaseForm title="cadastrar produto" >
+      <BaseForm title={formTitle} >
         <div className="row">
           <div className="col-6">
             <div className="margin-bottom-20">
@@ -66,12 +89,12 @@ const Form = () => {
 
             <div className="margin-bottom-20">
               <input type="text" 
-                    {...register('imageUrl', { required: "Campo obrigatório" })}
+                    {...register('imgUrl', { required: "Campo obrigatório" })}
                     className="form-control input-base" 
                     placeholder="url da imagem" />
-              { errors.imageUrl && (
+              { errors.imgUrl && (
                 <div className="invalid-feedback d-block">
-                  { errors.imageUrl.message }
+                  { errors.imgUrl.message }
                 </div>
               )}
             </div>
