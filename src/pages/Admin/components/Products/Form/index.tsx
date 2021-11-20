@@ -7,10 +7,12 @@ import BaseForm from '../../BaseForm';
 import { useHistory, useParams } from 'react-router';
 import { Category } from 'core/types/Product';
 import './styles.scss';
+import PriceField from './PriceField';
+import ImageUpload from '../ImageUpload';
 
-type FormState = {
+export type FormState = {
   name: string;
-  price: string;
+  price?: string;
   description: string;
   imgUrl: string;
   categories: Category[];
@@ -69,6 +71,8 @@ const Form = () => {
         <div className="row">
           <div className="col-6">
             <div className="margin-bottom-20">
+
+              {/* NAME */}
               <input type="text" 
                     {...register('name', { 
                           required: "Campo obrigatório",
@@ -87,15 +91,9 @@ const Form = () => {
                 </div>
               )}
             </div>
-            
+
+            {/* CATEGORY */}
             <div className="margin-bottom-20">
-              {/* <Controller
-                options={categories}
-                getOptionLabel={(option: Category) => option.name}
-                getOptionValue={(option: Category) => String(option.id)}
-                placeholder="Categoria"
-                classNamePrefix="categories-select"
-                isMulti /> */}
               <Controller
                 name="categories"
                 control={control}
@@ -117,32 +115,24 @@ const Form = () => {
                 </div>
               )}
             </div>
-
+            
+            {/* PRICE */}
             <div className="margin-bottom-20">
-              <input type="number"
-                    {...register('price', { required: "Campo obrigatório" })} 
-                    className="form-control input-base" 
-                    placeholder="Preço" />
+              <PriceField control={control} />
               { errors.price && (
                 <div className="invalid-feedback d-block">
                   { errors.price.message }
                 </div>
               )}
             </div>
-
+            
+            {/* URL IMAGE */}
             <div className="margin-bottom-20">
-              <input type="text" 
-                    {...register('imgUrl', { required: "Campo obrigatório" })}
-                    className="form-control input-base" 
-                    placeholder="url da imagem" />
-              { errors.imgUrl && (
-                <div className="invalid-feedback d-block">
-                  { errors.imgUrl.message }
-                </div>
-              )}
+              <ImageUpload />
             </div>
-
           </div>
+          
+          {/* DESCRIPITION */}
           <div className="col-6">
             <div>
               <textarea {...register('description', { required: 'Campo obrigatório' })} 
