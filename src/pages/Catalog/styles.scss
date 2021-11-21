@@ -3,9 +3,12 @@
   padding: 0 40px 40px 40px;
 }
 .catalog-title {
-  font-size: 24px;
+  display: flex;
+  font-size: 20px;
   line-height: 33px;
   letter-spacing: -0.015em;
+  align-items: center;
+  justify-content: center;
 }
 .catalog-products {
   margin-top: 40px;
