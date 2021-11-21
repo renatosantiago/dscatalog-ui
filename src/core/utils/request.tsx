@@ -1,15 +1,7 @@
-import axios, { Method } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 import { CLIENT_ID, CLIENT_SECRET, getSessionData } from './auth';
 import history from './history';
-
-type RequestParams = {
-  method?: Method;
-  url: string;
-  data?: object | string;
-  params?: object;
-  headers?: object;
-}
 
 type LoginData = {
   username: string;
@@ -35,13 +27,10 @@ axios.interceptors.response.use(function(response) {
  * funcao responsavel por fazer as requisicoes ao back-end
  * conforme headers e objetos passados como parametros
  */
-export const makeRequest = ({ method = 'GET', url, data, params, headers }:RequestParams) => {
+export const makeRequest = (params: AxiosRequestConfig) => {
   return axios({
-    method,
-    url: `${BASE_URL}${url}`,
-    data,
-    params,
-    headers
+    ...params,
+    baseURL: BASE_URL
   });
 }
 
@@ -50,12 +39,12 @@ export const makeRequest = ({ method = 'GET', url, data, params, headers }:Reque
  * adiciona o token ao header e chama a funcao que dispara requisicoes
  * ao back-end
  */
-export const makePrivateRequest = ({ method = 'GET', url, data, params }:RequestParams) => {
+export const makePrivateRequest = (params: AxiosRequestConfig) => {
   const sessionData = getSessionData();
   const headers = {
     'Authorization': `Bearer ${sessionData.access_token}`
   }
-  return makeRequest({ method, url, data, params, headers });
+  return makeRequest({ ...params, headers });
 }
 
 /**

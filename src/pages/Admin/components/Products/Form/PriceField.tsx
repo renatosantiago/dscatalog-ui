@@ -8,7 +8,6 @@ type Props = {
 }
 
 const PriceField = ({ control }: Props) => {
-
   return  (
     <Controller 
       name="price"    
@@ -21,7 +20,8 @@ const PriceField = ({ control }: Props) => {
           defaultValue=""
           className="form-control input-base"
           value={field.value}
-          intlConfig= {{ locale: 'pt-BR', currency: 'BRL'}}
+          intlConfig= {{ locale: 'pt-BR', currency: 'BRL',}}
+          onValueChange={field.onChange}
         />
       )}
     />
